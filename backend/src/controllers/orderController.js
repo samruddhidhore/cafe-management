@@ -1,15 +1,30 @@
-const express = require("express");
-const cors = require("cors");
+const orders = require("../data/orderData");
 
-const app = express();
+const addToOrder = (req, res) => {
+  const { user, id, name, price, qty } = req.body;
 
-app.use(cors());
-app.use(express.json());
+  if (!orders[user]) orders[user] = [];
 
-const orderRoutes = require("./routes/orderRoutes");
+  const existing = orders[user].find(o => o.id === id);
 
-app.use("/api/orders", orderRoutes);
+  if (existing) {
+    existing.qty += qty;
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
-});
+    if (existing.qty <= 0) {
+      orders[user] = orders[user].filter(o => o.id !== id);
+    }
+  } else {
+    if (qty > 0) {
+      orders[user].push({ id, name, price, qty });
+    }
+  }
+
+  res.json({ success: true, order: orders[user] });
+};
+
+const getOrder = (req, res) => {
+  const user = req.query.user;
+  res.json({ success: true, order: orders[user] || [] });
+};
+
+module.exports = { addToOrder, getOrder };
