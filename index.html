@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brew & Co. — Café Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #1a0f07;
+      --panel:     #231208;
+      --gold:      #c9a84c;
+      --gold-dark: #a8893a;
+      --cream:     #e8d8b0;
+      --muted:     #7a5c3a;
+      --ring:      rgba(201,168,76,0.12);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── decorative rings ── */
+    .ring {
+      position: fixed;
+      border-radius: 50%;
+      border: 1px solid var(--ring);
+      pointer-events: none;
+      animation: pulse 8s ease-in-out infinite;
+    }
+    .ring-1 { width: 560px; height: 560px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .ring-2 { width: 760px; height: 760px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: -3s; }
+
+    @keyframes pulse {
+      0%,100% { opacity: .4; }
+      50%      { opacity: .9; }
+    }
+
+    /* ── card ── */
+    .card {
+      position: relative;
+      z-index: 10;
+      width: min(520px, 92vw);
+      background: var(--panel);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 4px;
+      padding: 52px 48px 44px;
+      text-align: center;
+      box-shadow: 0 0 80px rgba(0,0,0,.7);
+      animation: fadeUp .7s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(22px); }
+      to   { opacity:1; transform: translateY(0);    }
+    }
+
+    /* ── cup emoji ── */
+    .cup { font-size: 52px; display: block; margin-bottom: 18px; animation: float 4s ease-in-out infinite; }
+    @keyframes float {
+      0%,100% { transform: translateY(0);    }
+      50%      { transform: translateY(-6px); }
+    }
+
+    /* ── brand ── */
+    .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: .25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .tagline {
+      margin-top: 6px;
+      font-size: .62rem;
+      letter-spacing: .35em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0;
+      color: var(--gold);
+      opacity: .5;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: .4;
+    }
+
+    /* ── welcome text ── */
+    .welcome {
+      font-size: .85rem;
+      color: var(--cream);
+      opacity: .75;
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    /* ── input ── */
+    .input-wrap { position: relative; margin-bottom: 14px; }
+
+    input[type="text"] {
+      width: 100%;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 3px;
+      padding: 18px 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--cream);
+      text-align: center;
+      letter-spacing: .06em;
+      outline: none;
+      transition: border-color .25s, background .25s;
+    }
+    input[type="text"]::placeholder { color: var(--muted); font-weight: 400; font-size: 1rem; }
+    input[type="text"]:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.06);
+    }
+
+    /* ── button ── */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      border: none;
+      border-radius: 3px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      color: #1a0f07;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background .2s;
+    }
+    .btn:hover { opacity: .92; transform: translateY(-1px); }
+    .btn:hover::after { background: rgba(255,255,255,.08); }
+    .btn:active { transform: translateY(0); opacity: 1; }
+
+    /* ── footnote ── */
+    .note {
+      margin-top: 18px;
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: .05em;
+    }
+
+    /* ── error shake ── */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-6px); }
+      75%      { transform: translateX(6px); }
+    }
+    .shake { animation: shake .3s ease; }
+  </style>
+</head>
+<body>
+
+  <div class="ring ring-1"></div>
+  <div class="ring ring-2"></div>
+
+  <div class="card">
+    <span class="cup">☕</span>
+
+    <div class="brand">Brew &amp; Co.</div>
+    <div class="tagline">Café Management System</div>
+
+    <div class="divider">✦</div>
+
+    <p class="welcome">Welcome! Enter your name so we can<br>personalize your order &amp; bill.</p>
+
+    <div class="input-wrap">
+      <input
+        id="nameInput"
+        type="text"
+        placeholder="Your name…"
+        maxlength="40"
+        autocomplete="off"
+        autofocus
+      />
+    </div>
+
+    <button class="btn" id="enterBtn">Enter Café →</button>
+
+    <p class="note">Your name will appear on the final bill.</p>
+  </div>
+
+  <script>
+    const nameInput = document.getElementById('nameInput');
+    const enterBtn  = document.getElementById('enterBtn');
+
+    function goToMenu() {
+      const name = nameInput.value.trim();
+      if (!name) {
+        nameInput.classList.remove('shake');
+        void nameInput.offsetWidth; // reflow to restart animation
+        nameInput.classList.add('shake');
+        nameInput.focus();
+        return;
+      }
+      // Store the name so menu.html can read it
+      sessionStorage.setItem('customerName', name);
+      window.location.href = 'menu.html';
+    }
+
+    enterBtn.addEventListener('click', goToMenu);
+
+    nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') goToMenu();
+    });
+
+    nameInput.addEventListener('animationend', () => {
+      nameInput.classList.remove('shake');
+    });
+  </script>
+</body>
+</html>
