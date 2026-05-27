@@ -13,7 +13,7 @@ if (orderBtn) {
   });
 }
 
-const user = localStorage.getItem("userName") || "Guest";
+const user = localStorage.getItem("userName") || "guest";
 
 // LOAD ORDER
 function loadOrder() {

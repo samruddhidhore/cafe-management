@@ -1,4 +1,4 @@
-// ============================================
+// =============================================
 //  BREW & CO. — Café Management
 //  script.js
 // =============================================
@@ -195,5 +195,3 @@ document.getElementById("orderBtn").addEventListener("click", () => {
 
 // ------ INIT ------
 renderCards(menuItems);
-
-
