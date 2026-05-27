@@ -1,15 +1,7 @@
-const express = require("express");
-const cors = require("cors");
+const app = require("./app");
 
-const app = express();
+const PORT = 5000;
 
-app.use(cors());
-app.use(express.json());
-
-const orderRoutes = require("./routes/orderRoutes");
-
-app.use("/api/orders", orderRoutes);
-
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
