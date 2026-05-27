@@ -1,6 +1,6 @@
 // =============================================
 //  BREW & CO. — Café Management
-//  script.js
+//  menu.js
 // =============================================
 
 // ------ MENU DATA ------
@@ -107,9 +107,30 @@ const menuItems = [
 let activeCategory = "all";
 let addedItems = new Set();
 
+// ------ INITIALIZATION ON LOAD ------
+document.addEventListener("DOMContentLoaded", () => {
+  // Restore user personalization layout text
+  const customerName = sessionStorage.getItem('customerName');
+  const profileNameEl = document.querySelector(".profile-name");
+  if (customerName && profileNameEl) {
+    profileNameEl.textContent = customerName.toLowerCase();
+  }
+
+  // Reload already added selections if returning back from the order page
+  const savedItems = JSON.parse(localStorage.getItem("selectedItems"));
+  if (savedItems) {
+    addedItems = new Set(savedItems);
+  }
+
+  // Initial menu draw execution
+  renderCards(menuItems);
+});
+
 // ------ RENDER CARDS ------
 function renderCards(items) {
   const grid = document.getElementById("menuGrid");
+  if (!grid) return;
+  
   grid.innerHTML = "";
 
   if (items.length === 0) {
@@ -149,16 +170,16 @@ function renderCards(items) {
 // ------ HANDLE ADD BUTTON ------
 function handleAdd(id, btn) {
   if (addedItems.has(id)) {
-    // Toggle off
     addedItems.delete(id);
     btn.textContent = "+ Add";
     btn.classList.remove("added");
   } else {
-    // Toggle on
     addedItems.add(id);
     btn.textContent = "✓ Added";
     btn.classList.add("added");
   }
+  // Save selections to localStorage so the Order page can read them
+  localStorage.setItem("selectedItems", JSON.stringify(Array.from(addedItems)));
 }
 
 // ------ FILTER ------
@@ -169,10 +190,8 @@ function filterItems(category) {
 
 // ------ CATEGORY BUTTONS ------
 const filterBtns = document.querySelectorAll(".filter-btn");
-
 filterBtns.forEach(btn => {
   btn.addEventListener("click", () => {
-    // Update active
     filterBtns.forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
@@ -181,20 +200,18 @@ filterBtns.forEach(btn => {
   });
 });
 
-// ------ NAV BUTTONS (visual only) ------
-const navBtns = document.querySelectorAll(".nav-btn");
+// ------ NAV BUTTONS ROUTING ------
+// Inside frontend/menu_page/menu.js
 
+const navBtns = document.querySelectorAll(".nav-btn");
 navBtns.forEach(btn => {
   btn.addEventListener("click", () => {
-    navBtns.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
+    const page = btn.dataset.page;
+    if (page === "order") {
+      // '../' leaves menu_page, then we enter frontend-order/order.html
+      window.location.href = "../frontend-order/order.html"; 
+    } else if (page === "menu") {
+      window.location.href = "menu.html";
+    }
   });
 });
-
-// ------ FAB PDF (placeholder) ------
-document.querySelector(".fab-pdf").addEventListener("click", () => {
-  alert("PDF download feature coming soon!");
-});
-
-// ------ INITIAL RENDER ------
-renderCards(menuItems);
