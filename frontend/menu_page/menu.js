@@ -103,9 +103,12 @@ const menuItems = [
   }
 ];
 
-// ------ STATE ------
-let activeCategory = "all";
-let addedItems = new Set();
+const user = sessionStorage.getItem("customerName") || "Guest";
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("profileName").innerText = user;
+});
+<<<<<<< HEAD
 
 // ------ INITIALIZATION ON LOAD ------
 document.addEventListener("DOMContentLoaded", () => {
@@ -125,6 +128,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial menu draw execution
   renderCards(menuItems);
 });
+=======
+>>>>>>> frontend-menu
 
 // ------ RENDER CARDS ------
 function renderCards(items) {
@@ -142,31 +147,26 @@ function renderCards(items) {
     return;
   }
 
-  items.forEach((item, index) => {
+  items.forEach(item => {
     const card = document.createElement("div");
     card.className = "menu-card";
-    card.style.animationDelay = `${index * 0.06}s`;
-
-    const isAdded = addedItems.has(item.id);
 
     card.innerHTML = `
       <span class="card-emoji">${item.emoji}</span>
       <div class="card-name">${item.name}</div>
       <div class="card-desc">${item.description}</div>
       <div class="card-price">₹${item.price}</div>
-      <button
-        class="card-add-btn ${isAdded ? "added" : ""}"
-        data-id="${item.id}"
-      >${isAdded ? "✓ Added" : "+ Add"}</button>
-    `;
 
-    const btn = card.querySelector(".card-add-btn");
-    btn.addEventListener("click", () => handleAdd(item.id, btn));
+      <button class="card-add-btn" onclick="addToOrder(${item.id})">
+        + Add
+      </button>
+    `;
 
     grid.appendChild(card);
   });
 }
 
+<<<<<<< HEAD
 // ------ HANDLE ADD BUTTON ------
 function handleAdd(id, btn) {
   if (addedItems.has(id)) {
@@ -180,6 +180,36 @@ function handleAdd(id, btn) {
   }
   // Save selections to localStorage so the Order page can read them
   localStorage.setItem("selectedItems", JSON.stringify(Array.from(addedItems)));
+
+=======
+>>>>>>> frontend-menu
+// ------ ADD TO ORDER (BACKEND CALL) ------
+function addToOrder(id) {
+  const item = menuItems.find(i => i.id === id);
+
+  fetch("http://localhost:5000/api/orders/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      user: localStorage.getItem("userName") || "guest",
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      qty: 1
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("Added:", data);
+    alert("Item added to order ✔");
+  })
+  .catch(err => console.log(err));
+<<<<<<< HEAD
+
+=======
+>>>>>>> frontend-menu
 }
 
 // ------ FILTER ------
@@ -188,17 +218,17 @@ function filterItems(category) {
   return menuItems.filter(item => item.category === category);
 }
 
-// ------ CATEGORY BUTTONS ------
 const filterBtns = document.querySelectorAll(".filter-btn");
 filterBtns.forEach(btn => {
   btn.addEventListener("click", () => {
     filterBtns.forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    activeCategory = btn.dataset.category;
-    renderCards(filterItems(activeCategory));
+    renderCards(filterItems(btn.dataset.category));
   });
 });
+
+<<<<<<< HEAD
 
 // ------ NAV BUTTONS ROUTING ------
 // Inside frontend/menu_page/menu.js
@@ -215,3 +245,28 @@ navBtns.forEach(btn => {
     }
   });
 });
+// ------ NAVIGATION ------
+document.getElementById("menuBtn").addEventListener("click", () => {
+  window.location.href = "./menu.html";
+});
+
+document.getElementById("orderBtn").addEventListener("click", () => {
+  window.location.href = "../frontend-order/index.html";
+});
+
+// ------ INIT ------
+renderCards(menuItems);
+}
+=======
+// ------ NAVIGATION ------
+document.getElementById("menuBtn").addEventListener("click", () => {
+  window.location.href = "./menu.html";
+});
+
+document.getElementById("orderBtn").addEventListener("click", () => {
+  window.location.href = "../frontend-order/index.html";
+});
+
+// ------ INIT ------
+renderCards(menuItems);
+>>>>>>> frontend-menu
