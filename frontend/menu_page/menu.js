@@ -209,7 +209,7 @@ navBtns.forEach(btn => {
     const page = btn.dataset.page;
     if (page === "order") {
       // '../' leaves menu_page, then we enter frontend-order/order.html
-      window.location.href = "../frontend-order/order.html"; 
+      window.location.href = "../frontend-order/index.html"; 
     } else if (page === "menu") {
       window.location.href = "menu.html";
     }
