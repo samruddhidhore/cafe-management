@@ -1,3 +1,4 @@
+// admin.js
 const API_BASE = "http://localhost:5000/admin";
 
 let menuItems = [];
