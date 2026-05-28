@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brew & Co. — Billing</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f1e7;
+      color: #2b2219;
+    }
+    .page-shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .brand-title {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 0.08em;
+      color: #7f5d2b;
+      text-transform: uppercase;
+    }
+    .section-card {
+      background: #fff;
+      border: 1px solid #dfd5c7;
+      border-radius: 14px;
+      padding: 26px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.08);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+    }
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .invoice-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+    .invoice-header p {
+      margin: 4px 0 0;
+      color: #7d6a58;
+    }
+    .info-row, .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+    .info-row strong, .summary-row strong {
+      color: #3c2f24;
+    }
+    .order-items {
+      margin: 18px 0;
+      border-top: 1px solid #e8ddd0;
+      padding-top: 18px;
+    }
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1e7dc;
+    }
+    .order-item-row:last-child {
+      border-bottom: none;
+    }
+    .actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: #a67c52;
+      color: #fff;
+    }
+    .btn-secondary {
+      background: #fff;
+      color: #5a4534;
+      border: 1px solid #d8c2a6;
+    }
+    .no-order {
+      display: none;
+      min-height: 280px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 16px;
+      padding: 40px;
+      color: #7a6450;
+    }
+    .no-order.active { display: flex; }
+    .no-order h3 { margin: 0; font-size: 1.3rem; }
+    .no-order p { margin: 0; color: #8b7a6d; }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header>
+      <div>
+        <p class="brand-title">Brew & Co.</p>
+        <p>Billing summary</p>
+      </div>
+      <div>
+        <span id="nav-username">Guest</span>
+      </div>
+    </header>
+
+    <div class="section-card" id="bill-content">
+      <div class="invoice-header">
+        <div>
+          <p><strong id="success-name">Guest</strong></p>
+          <p>Order processed successfully.</p>
+        </div>
+        <div>
+          <p><strong>Order ID:</strong> <span id="receipt-order-id">N/A</span></p>
+          <p><strong>Payment:</strong> <span id="receipt-payment">N/A</span></p>
+          <p><strong>Time:</strong> <span id="receipt-datetime">N/A</span></p>
+        </div>
+      </div>
+
+      <div class="order-items" id="order-items"></div>
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <strong id="subtotal-val">₹0</strong>
+      </div>
+      <div class="summary-row">
+        <span>GST (5%)</span>
+        <strong id="gst-val">₹0</strong>
+      </div>
+      <div class="summary-row" style="font-size:1.05rem; margin-top:14px;">
+        <span>Total</span>
+        <strong id="total-val">₹0</strong>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" onclick="generatePDF()">Download PDF</button>
+        <button class="btn-secondary" onclick="clearOrder()">Complete & Clear Order</button>
+      </div>
+    </div>
+
+    <div class="section-card no-order" id="no-order-box">
+      <div>
+        <h3>No bill available</h3>
+        <p>Place an order first, then return to this page.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="bill.js"></script>
+</body>
+</html>

@@ -303,7 +303,7 @@ function generatePDF() {
 function clearOrder() {
   localStorage.removeItem("orderItems");
   localStorage.removeItem("customerData");
-  window.location.href = "menu.html";
+  window.location.href = "../menu_page/menu.html";
 }
 
 // =============================================
