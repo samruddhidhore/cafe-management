@@ -101,7 +101,7 @@ function handlePlaceOrderClick() {
         return;
       }
 
-      const customerName = sessionStorage.getItem("customerName") || "Guest";
+      const customerName = sessionStorage.getItem("customerName") || "guest";
 
       const customerData = {
         customerName,
