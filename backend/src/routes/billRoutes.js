@@ -7,8 +7,6 @@ const {
   getAllBills
 } = require('../controllers/billController');
 
-const router = express.Router();
-
 router.post('/generate', generateBill);
 
 router.get('/all', getAllBills);
