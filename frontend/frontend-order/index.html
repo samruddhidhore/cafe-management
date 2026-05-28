@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Section - Cafe Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="order-navbar">
+        <div class="logo">
+            <h1>BREW & CO.</h1>
+            <span>Café Management System</span>
+        </div>
+        
+        <div class="nav-links">
+            <!-- <span class="nav-item">Home</span> -->
+            <span class="nav-item" id="menuBtn">Menu</span>
+            <span class="nav-item active" id="orderBtn">
+  Order
+  <span class="cart-badge" id="order-badge-count">0</span>
+</span>
+        </div>
+    </header>
+
+    <main class="order-layout-container">
+        <h2 class="page-header">Review Your Order</h2>
+        
+        <div class="split-columns">
+            
+            <div class="items-side-list" id="order-items-container">
+                </div>
+
+            <div class="summary-side-panel">
+                <div class="billing-card">
+                    <h3>Order Summary</h3>
+                    
+                    <div class="bill-row">
+                        <span>Customer Name:</span>
+                        <strong id="bill-customer-name">Loading...</strong>
+                    </div>
+                    
+                    <div class="bill-row">
+                        <span>Subtotal:</span>
+                        <span id="bill-subtotal">₹0</span>
+                    </div>
+                    
+                    <div class="bill-row">
+                        <span>GST (5%):</span>
+                        <span id="bill-gst">₹0</span>
+                    </div>
+                    
+                    <div class="bill-row grand-total-row">
+                        <span>Total Amount:</span>
+                        <span id="bill-total-amount">₹0</span>
+                    </div>
+                    
+                    <button class="place-order-button" onclick="handlePlaceOrderClick()">Place Order ✓</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="order.js"></script>
+    <script src="menu.js"></script>
+</body>
+</html> 
+
+
