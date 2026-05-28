@@ -108,7 +108,6 @@ const user = sessionStorage.getItem("customerName") || "Guest";
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("profileName").innerText = user;
 });
-<<<<<<< HEAD
 
 
 // ------ INITIALIZATION ON LOAD ------
@@ -130,8 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCards(menuItems);
 });
 
-=======
->>>>>>> 0250c3bab1ad7635b2e1bdba399dcc2ecd7fd2b6
 
 // ------ RENDER CARDS ------
 function renderCards(items) {
@@ -166,7 +163,6 @@ function renderCards(items) {
   });
 }
 
-<<<<<<< HEAD
 // ------ HANDLE ADD BUTTON ------
 function handleAdd(id, btn) {
   if (addedItems.has(id)) {
@@ -181,8 +177,6 @@ function handleAdd(id, btn) {
   // Save selections to localStorage so the Order page can read them
   localStorage.setItem("selectedItems", JSON.stringify(Array.from(addedItems)));
 
-=======
->>>>>>> 0250c3bab1ad7635b2e1bdba399dcc2ecd7fd2b6
 // ------ ADD TO ORDER (BACKEND CALL) ------
 function addToOrder(id) {
   const item = menuItems.find(i => i.id === id);
@@ -225,7 +219,6 @@ filterBtns.forEach(btn => {
   });
 });
 
-<<<<<<< HEAD
 
 // ------ NAV BUTTONS ROUTING ------
 // Inside frontend/menu_page/menu.js
@@ -242,8 +235,6 @@ navBtns.forEach(btn => {
     }
   });
 });
-=======
->>>>>>> 0250c3bab1ad7635b2e1bdba399dcc2ecd7fd2b6
 // ------ NAVIGATION ------
 document.getElementById("menuBtn").addEventListener("click", () => {
   window.location.href = "./menu.html";
@@ -254,9 +245,6 @@ document.getElementById("orderBtn").addEventListener("click", () => {
 });
 
 // ------ INIT ------
-<<<<<<< HEAD
 renderCards(menuItems);
 }
-=======
 renderCards(menuItems);
->>>>>>> 0250c3bab1ad7635b2e1bdba399dcc2ecd7fd2b6
