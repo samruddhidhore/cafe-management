@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brew & Co. — Admin Dashboard</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <nav>
+      <div class="nav-brand">
+        <div class="logo">☕</div>
+        <div>
+          <h1>BREW &amp; CO.</h1>
+          <span>Café Management</span>
+        </div>
+      </div>
+
+      <div class="nav-user">
+        <div class="dot"></div>
+        🛡 admin
+      </div>
+    </nav>
+
+
+    <!-- BILLS -->
+    <div class="page active" id="page-bills">
+      <p class="page-title">Billing History</p>
+
+      <div class="bills-filters">
+        <button class="filter-btn active" onclick="filterBills('all', this)">
+          All
+        </button>
+        
+      </div>
+
+      <div id="bills-list"></div>
+    </div>
+
+
+    <script src="admin.js"></script>
+  </body>
+</html>
