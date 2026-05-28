@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BREW & CO. – Cafe Bill</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="bill.css" />
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="nav-logo">
+        <span class="logo-icon">☕</span>
+        <div class="logo-text">
+          <span class="logo-name">BREW & CO.</span>
+          <span class="logo-sub">CAFÉ MANAGEMENT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-center">
+      <button class="nav-user-btn">
+        <span class="user-icon">👤</span>
+        <span id="nav-username">karan</span>
+      </button>
+    </div>
+
+    <div class="nav-right">
+      <button class="nav-pill" onclick="window.location.href='menu.html'">Menu</button>
+      <button class="nav-pill nav-badge-wrap" onclick="window.location.href='order.html'">
+        Order
+        <span class="nav-badge" id="order-badge">2</span>
+      </button>
+      <button class="nav-pill nav-pill--active">Bill</button>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Bill</h1>
+
+    <!-- No Order State -->
+    <div class="no-order-box" id="no-order-box" style="display:none;">
+      <span class="no-order-icon">🧾</span>
+      <p>No active order found</p>
+    </div>
+
+    <!-- Bill Content -->
+    <div id="bill-content">
+
+      <!-- Success Message -->
+      <div class="success-card" id="success-card">
+        <div class="success-check">✓</div>
+        <div class="success-text">
+          <p class="success-heading">Order placed successfully!</p>
+          <p class="success-sub">Your order is being prepared. Thank you, <span id="success-name">karan</span>!</p>
+        </div>
+      </div>
+
+      <!-- Bill Receipt -->
+      <div class="receipt-card" id="receipt-card">
+        <!-- Receipt Header -->
+        <div class="receipt-header">
+          <h2 class="receipt-title">BREW &amp; CO.</h2>
+          <p class="receipt-tagline">Thank you for your visit!</p>
+          <p class="receipt-datetime" id="receipt-datetime"></p>
+          <p class="receipt-meta">Order ID: <span id="receipt-order-id"></span> &nbsp;|&nbsp; Payment: <span id="receipt-payment"></span></p>
+        </div>
+
+        <!-- Divider -->
+        <hr class="receipt-divider" />
+
+        <!-- Billed To -->
+        <div class="billed-to-box">
+          <span class="billed-label">BILLED TO:</span>
+          <span class="billed-name" id="billed-name"></span>
+        </div>
+
+        <!-- Divider -->
+        <hr class="receipt-divider" />
+
+        <!-- Order Items -->
+        <div class="order-items" id="order-items">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Divider -->
+        <hr class="receipt-divider receipt-divider--dashed" />
+
+        <!-- Bill Summary -->
+        <div class="bill-summary" id="bill-summary">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="subtotal-val"></span>
+          </div>
+          <div class="summary-row">
+            <span>GST (5%)</span>
+            <span id="gst-val"></span>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <hr class="receipt-divider receipt-divider--dashed" />
+
+        <!-- Total -->
+        <div class="total-row">
+          <span class="total-label">TOTAL</span>
+          <span class="total-amount" id="total-val"></span>
+        </div>
+
+        <!-- Footer -->
+        <p class="receipt-footer">*** Please visit again ***</p>
+      </div>
+
+      <!-- Start New Order Button -->
+      <button class="new-order-btn" id="new-order-btn" onclick="clearOrder()">
+        Start New Order ↺
+      </button>
+
+    </div><!-- end #bill-content -->
+  </main>
+
+  <!-- Floating PDF Button -->
+  <button class="pdf-btn" id="pdf-btn" title="Download PDF" onclick="generatePDF()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="12" y1="18" x2="12" y2="12"/>
+      <line x1="9" y1="15" x2="15" y2="15"/>
+    </svg>
+  </button>
+
+  <script src="bill.js"></script>
+</body>
+</html>
