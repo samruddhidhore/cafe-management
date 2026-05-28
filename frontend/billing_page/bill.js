@@ -13,7 +13,7 @@
 // =============================================
 
 const BACKEND_URL  = "http://localhost:5000/api/bill/generate";
-const USE_BACKEND  = false; // ← flip to true when your server is running
+const USE_BACKEND  = true; // ← enabled so bills are sent to backend and shown to admin
 
 // =============================================
 // DEFAULT DEMO DATA (seeds localStorage once)

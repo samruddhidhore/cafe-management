@@ -24,6 +24,8 @@ const createBill = (data) => {
 
     totalAmount: billData.finalTotal,
 
+    status: "paid",
+
     createdAt: new Date()
   };
 

@@ -86,17 +86,16 @@ let editingId = null;
 let currentBillFilter = "all";
 let bills = [];
 async function loadBills(status = "all") {
+  const url = "http://localhost:5000/api/bill/all";
 
-  const url =
-    status === "all"
-      ? "http://localhost:5000/admin/orders"
-      : `http://localhost:5000/admin/orders/status/${status}`;
-
-  const res = await fetch(url);
-
-  const data = await res.json();
-
-  bills = data;
+  try {
+    const res = await fetch(url);
+    const result = await res.json();
+    bills = result.success ? result.data : [];
+  } catch (err) {
+    console.error("Failed to load bills:", err);
+    bills = [];
+  }
 
   renderBills();
 }
@@ -281,24 +280,34 @@ function renderBills() {
       : bills.filter((b) => b.status === currentBillFilter);
 
   container.innerHTML = filtered
-    .map(
-      (b) => `
+    .map((b) => {
+      const billId = b.billId || b.id || "-";
+      const customerName = b.customerName || b.customer || "Guest";
+      const itemList = Array.isArray(b.items)
+        ? b.items.map(i => i.itemName || i.name || "").filter(Boolean).join(", ")
+        : b.items || "";
+      const date = b.createdAt ? new Date(b.createdAt).toLocaleString() : (b.date || "");
+      const total = b.totalAmount ?? b.total ?? 0;
+
+      return `
       <div class="bill-card">
 
-        <div class="bill-id">${b.id}</div>
+        <div class="bill-id">${billId}</div>
 
         <div class="bill-info">
-          <div class="bill-customer">${b.customer}</div>
-          <div class="bill-items-list">${b.items}</div>
+          <div class="bill-customer">${customerName}</div>
+          <div class="bill-items-list">${itemList}</div>
         </div>
 
-        <div class="bill-date">${b.date}</div>
+      <div class="bill-date">${date}</div>
 
-        <div class="bill-total">₹${b.total}</div>
+        <div class="bill-total">₹${total}</div>
+
+        <div class="bill-status">${b.status || "paid"}</div>
 
       </div>
-    `,
-    )
+      `;
+    })
     .join("");
 }
 
@@ -316,6 +325,4 @@ function filterBills(filter, btn) {
 }
 
 // INITIAL LOAD
-renderMenu();
-
 loadBills();
