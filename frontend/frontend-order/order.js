@@ -26,7 +26,7 @@ function loadOrder() {
     });
 }
 
-+
+
 
 // RENDER ITEMS ONLY
 function render(items) {
@@ -49,8 +49,7 @@ function render(items) {
       <div>
         <h4>${item.name}</h4>
         <span>₹${item.price}</span>
- 
- +       </div>
+      </div>
 
       <div>
         <button onclick="changeQty(${item.id}, -1)">-</button>
