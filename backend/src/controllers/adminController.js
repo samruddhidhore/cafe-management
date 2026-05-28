@@ -1,14 +1,14 @@
 const orderService = require("./orderService");
 const billService = require("./billService");
 
-/* MENU (delegate if needed) */
+/* MENU Managment */
 const getMenu = () => orderService.getMenu();
 const addMenu = (data) => orderService.addMenu(data);
 const editMenu = (id, data) => orderService.editMenu(id, data);
 const deleteMenu = (id) => orderService.deleteMenu(id);
 const toggleAvailability = (id) => orderService.toggleAvailability(id);
 
-/* ORDERS */
+/* ORDER Managment */
 const getOrders = () => orderService.getOrders();
 const addOrder = (data) => orderService.addOrder(data);
 const updateOrderStatus = (id, status) =>
@@ -16,13 +16,13 @@ const updateOrderStatus = (id, status) =>
 const getOrdersByStatus = (status) =>
   orderService.getOrdersByStatus(status);
 
-/* BILLS */
+/* Billing Managment */
 const getBills = () => billService.getBills();
 
-/* ANALYTICS */
+/* SALES ANALYTICS */
 const getTopSelling = () => orderService.getTopSelling();
 
-/* DASHBOARD */
+/* Dashboard Statistics*/
 const getDashboard = () => {
   const orders = orderService.getOrders();
   const bills = billService.getBills();
