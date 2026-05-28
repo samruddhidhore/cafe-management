@@ -1,43 +1,66 @@
+const orderService = require("./orderService");
+const billService = require("./billService");
 
-const service = require("../services/adminService");
+/* MENU Managment */
+const getMenu = () => orderService.getMenu();
+const addMenu = (data) => orderService.addMenu(data);
+const editMenu = (id, data) => orderService.editMenu(id, data);
+const deleteMenu = (id) => orderService.deleteMenu(id);
+const toggleAvailability = (id) => orderService.toggleAvailability(id);
 
-/* MENU */
-exports.addMenu = (req, res) => res.json(service.addMenu(req.body));
+/* ORDER Managment */
+const getOrders = () => orderService.getOrders();
+const addOrder = (data) => orderService.addOrder(data);
+const updateOrderStatus = (id, status) =>
+  orderService.updateOrderStatus(id, status);
+const getOrdersByStatus = (status) =>
+  orderService.getOrdersByStatus(status);
 
-exports.getMenu = (req, res) => res.json(service.getMenu());
+/* Billing Managment */
+const getBills = () => billService.getBills();
 
-exports.editMenu = (req, res) => {
-  const result = service.editMenu(req.params.id, req.body);
-  if (!result) return res.status(404).json({ message: "Not found" });
-  res.json(result);
+/* SALES ANALYTICS */
+const getTopSelling = () => orderService.getTopSelling();
+
+/* Dashboard Statistics*/
+const getDashboard = () => {
+  const orders = orderService.getOrders();
+  const bills = billService.getBills();
+
+  const totalOrders = orders.length;
+  const totalBills = bills.length;
+
+  const pendingOrders = orders.filter(o => o.status === "pending").length;
+  const completedOrders = orders.filter(o => o.status === "completed").length;
+
+  const totalRevenue = bills.reduce((sum, b) => {
+    return sum + (b.totalBill || b.total || 0);
+  }, 0);
+
+  return {
+    totalOrders,
+    totalBills,
+    pendingOrders,
+    completedOrders,
+    totalRevenue,
+    topSelling: orderService.getTopSelling(),
+  };
 };
 
-exports.deleteMenu = (req, res) => {
-  const result = service.deleteMenu(req.params.id);
-  if (!result) return res.status(404).json({ message: "Not found" });
-  res.json({ message: "Deleted" });
+module.exports = {
+  getMenu,
+  addMenu,
+  editMenu,
+  deleteMenu,
+  toggleAvailability,
+
+  getOrders,
+  addOrder,
+  updateOrderStatus,
+  getOrdersByStatus,
+
+  getBills,
+
+  getTopSelling,
+  getDashboard,
 };
-
-exports.toggleAvailability = (req, res) => {
-  const result = service.toggleAvailability(req.params.id);
-  if (!result) return res.status(404).json({ message: "Not found" });
-  res.json(result);
-};
-
-/* ORDERS */
-exports.addOrder = (req, res) => res.json(service.addOrder(req.body));
-
-exports.getOrders = (req, res) => res.json(service.getOrders());
-
-exports.getOrdersByStatus = (req, res) =>
-  res.json(service.getOrdersByStatus(req.params.status));
-
-exports.updateOrderStatus = (req, res) => {
-  const result = service.updateOrderStatus(req.params.id, req.body.status);
-  if (!result) return res.status(404).json({ message: "Not found" });
-  res.json(result);
-};
-
-/* ANALYTICS */
-exports.getTopSelling = (req, res) =>
-  res.json(service.getTopSelling());
