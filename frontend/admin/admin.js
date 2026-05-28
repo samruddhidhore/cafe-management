@@ -1,4 +1,3 @@
-// MENU ITEMS
 let menuItems = [
   {
     id: 1,
@@ -84,69 +83,23 @@ let menuItems = [
 
 let nextId = 6;
 let editingId = null;
-
-// BILLS
-let bills = [
-  {
-    id: "#1042",
-    customer: "Riya",
-    items: "Latte × 2",
-    total: 340,
-    status: "paid",
-    date: "Today",
-  },
-
-  {
-    id: "#1041",
-    customer: "Arjun",
-    items: "Espresso",
-    total: 180,
-    status: "pending",
-    date: "Today",
-  },
-  {
-    id: "#1040",
-    customer: "Meera",
-    items: "Cappuccino × 3",
-    total: 360,
-    status: "pending",
-    date: "Today, 10:58 AM",
-  },
-  {
-    id: "#1039",
-    customer: "Kiran",
-    items: "Cold Brew",
-    total: 150,
-    status: "paid",
-    date: "Today, 10:32 AM",
-  },
-  {
-    id: "#1038",
-    customer: "Priya",
-    items: "Waffle, Latte",
-    total: 370,
-    status: "cancelled",
-    date: "Yesterday, 4:20 PM",
-  },
-  {
-    id: "#1037",
-    customer: "Sahil",
-    items: "Espresso × 2",
-    total: 160,
-    status: "paid",
-    date: "Yesterday, 3:10 PM",
-  },
-  {
-    id: "#1036",
-    customer: "Naina",
-    items: "Masala Chai × 4",
-    total: 240,
-    status: "pending",
-    date: "Yesterday, 2:45 PM",
-  },
-];
-
 let currentBillFilter = "all";
+let bills = [];
+async function loadBills(status = "all") {
+
+  const url =
+    status === "all"
+      ? "http://localhost:5000/admin/orders"
+      : `http://localhost:5000/admin/orders/status/${status}`;
+
+  const res = await fetch(url);
+
+  const data = await res.json();
+
+  bills = data;
+
+  renderBills();
+}
 
 // TAB SWITCH
 function switchTab(tab, btn) {
@@ -359,10 +312,10 @@ function filterBills(filter, btn) {
 
   btn.classList.add("active");
 
-  renderBills();
+ loadBills(filter);
 }
 
 // INITIAL LOAD
 renderMenu();
 
-renderBills();
+loadBills();
