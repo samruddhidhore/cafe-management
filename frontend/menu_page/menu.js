@@ -109,27 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("profileName").innerText = user;
 });
 
-
-// ------ INITIALIZATION ON LOAD ------
-document.addEventListener("DOMContentLoaded", () => {
-  // Restore user personalization layout text
-  const customerName = sessionStorage.getItem('customerName');
-  const profileNameEl = document.querySelector(".profile-name");
-  if (customerName && profileNameEl) {
-    profileNameEl.textContent = customerName.toLowerCase();
-  }
-
-  // Reload already added selections if returning back from the order page
-  const savedItems = JSON.parse(localStorage.getItem("selectedItems"));
-  if (savedItems) {
-    addedItems = new Set(savedItems);
-  }
-
-  // Initial menu draw execution
-  renderCards(menuItems);
-});
-
-
 // ------ RENDER CARDS ------
 function renderCards(items) {
   const grid = document.getElementById("menuGrid");
@@ -163,28 +142,6 @@ function renderCards(items) {
   });
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> menu-api
-// ------ HANDLE ADD BUTTON ------
-function handleAdd(id, btn) {
-  if (addedItems.has(id)) {
-    addedItems.delete(id);
-    btn.textContent = "+ Add";
-    btn.classList.remove("added");
-  } else {
-    addedItems.add(id);
-    btn.textContent = "✓ Added";
-    btn.classList.add("added");
-  }
-  // Save selections to localStorage so the Order page can read them
-  localStorage.setItem("selectedItems", JSON.stringify(Array.from(addedItems)));
-
-<<<<<<< HEAD
-=======
-
->>>>>>> menu-api
 // ------ ADD TO ORDER (BACKEND CALL) ------
 function addToOrder(id) {
   const item = menuItems.find(i => i.id === id);
@@ -195,7 +152,7 @@ function addToOrder(id) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      user: localStorage.getItem("userName") || "guest",
+      user: sessionStorage.getItem("customerName") || "guest",
       id: item.id,
       name: item.name,
       price: item.price,
@@ -227,26 +184,6 @@ filterBtns.forEach(btn => {
   });
 });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> menu-api
-
-// ------ NAV BUTTONS ROUTING ------
-// Inside frontend/menu_page/menu.js
-
-const navBtns = document.querySelectorAll(".nav-btn");
-navBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const page = btn.dataset.page;
-    if (page === "order") {
-      // '../' leaves menu_page, then we enter frontend-order/order.html
-      window.location.href = "../frontend-order/order.html"; 
-    } else if (page === "menu") {
-      window.location.href = "menu.html";
-    }
-  });
-});
 // ------ NAVIGATION ------
 document.getElementById("menuBtn").addEventListener("click", () => {
   window.location.href = "./menu.html";
@@ -258,21 +195,3 @@ document.getElementById("orderBtn").addEventListener("click", () => {
 
 // ------ INIT ------
 renderCards(menuItems);
-}
-<<<<<<< HEAD
-renderCards(menuItems);
-=======
-
-// ------ NAVIGATION ------
-document.getElementById("menuBtn").addEventListener("click", () => {
-  window.location.href = "./menu.html";
-});
-
-document.getElementById("orderBtn").addEventListener("click", () => {
-  window.location.href = "../frontend-order/index.html";
-});
-
-// ------ INIT ------
-renderCards(menuItems);
-
->>>>>>> menu-api
