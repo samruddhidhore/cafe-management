@@ -26,7 +26,7 @@ function loadOrder() {
     });
 }
 
-+
+
 
 // RENDER ITEMS ONLY
 function render(items) {
@@ -49,8 +49,7 @@ function render(items) {
       <div>
         <h4>${item.name}</h4>
         <span>₹${item.price}</span>
- 
- +       </div>
+      </div>
 
       <div>
         <button onclick="changeQty(${item.id}, -1)">-</button>
@@ -101,7 +100,7 @@ function handlePlaceOrderClick() {
         return;
       }
 
-      const customerName = sessionStorage.getItem("customerName") || "guest";
+      const customerName = sessionStorage.getItem("customerName") || "Guest";
 
       const customerData = {
         customerName,
