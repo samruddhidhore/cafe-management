@@ -1,5 +1,6 @@
-const orderService = require("./orderService");
-const billService = require("./billService");
+const orderService = require('../services/orderService');
+const billService = require("../Services/billService");
+const adminService = require('../services/adminService');
 
 /* MENU Managment */
 const getMenu = () => orderService.getMenu();
