@@ -84,6 +84,22 @@ let menuItems = [
 let nextId = 6;
 let editingId = null;
 let currentBillFilter = "all";
+let bills = [];
+async function loadBills(status = "all") {
+
+  const url =
+    status === "all"
+      ? "http://localhost:5000/admin/orders"
+      : `http://localhost:5000/admin/orders/status/${status}`;
+
+  const res = await fetch(url);
+
+  const data = await res.json();
+
+  bills = data;
+
+  renderBills();
+}
 
 // TAB SWITCH
 function switchTab(tab, btn) {
@@ -296,10 +312,10 @@ function filterBills(filter, btn) {
 
   btn.classList.add("active");
 
-  renderBills();
+ loadBills(filter);
 }
 
 // INITIAL LOAD
 renderMenu();
 
-renderBills();
+loadBills();

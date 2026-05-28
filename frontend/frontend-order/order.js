@@ -13,14 +13,16 @@ if (orderBtn) {
   });
 }
 
-const user = localStorage.getItem("userName") || "guest";
+const user = sessionStorage.getItem("customerName") || "guest";
 
 // LOAD ORDER
 function loadOrder() {
   fetch(`http://localhost:5000/api/orders?user=${user}`)
     .then(res => res.json())
     .then(data => {
-      render(data.order || []);
+      const items = data.order || [];
+      render(items);
+      updateSummary(items);
     });
 }
 
@@ -61,6 +63,64 @@ function render(items) {
 
     container.appendChild(div);
   });
+}
+
+// UPDATE SUMMARY VALUES (subtotal, gst, total, customer name)
+function updateSummary(items) {
+  const nameEl = document.getElementById("bill-customer-name");
+  const subtotalEl = document.getElementById("bill-subtotal");
+  const gstEl = document.getElementById("bill-gst");
+  const totalEl = document.getElementById("bill-total-amount");
+
+  const customerName = sessionStorage.getItem("customerName") || "Guest";
+
+  if (nameEl) nameEl.textContent = customerName;
+
+  const subtotal = items.reduce((s, it) => s + (it.price || it.price === 0 ? it.price * (it.qty || it.qty === 0 ? it.qty : it.qty) : 0), 0);
+
+  const gst = Math.round(subtotal * 0.05);
+  const total = subtotal + gst;
+
+  if (subtotalEl) subtotalEl.textContent = `₹${subtotal}`;
+  if (gstEl) gstEl.textContent = `₹${gst}`;
+  if (totalEl) totalEl.textContent = `₹${total}`;
+
+  // store a draft summary in localStorage so billing page can pick it up if needed
+  localStorage.setItem("orderSummary", JSON.stringify({ customerName, subtotal, gst, total }));
+}
+
+// PLACE ORDER BUTTON — save customerData and orderItems then navigate to bill page
+function handlePlaceOrderClick() {
+  fetch(`http://localhost:5000/api/orders?user=${user}`)
+    .then(res => res.json())
+    .then(data => {
+      const items = data.order || [];
+
+      if (!items.length) {
+        alert("No items in order to place");
+        return;
+      }
+
+      const customerName = sessionStorage.getItem("customerName") || "Guest";
+
+      const customerData = {
+        customerName,
+        orderId: `ORD-${Date.now()}`,
+        paymentMethod: "Cash"
+      };
+
+      const orderItems = items.map(it => ({ name: it.name, quantity: it.qty, price: it.price }));
+
+      localStorage.setItem("customerData", JSON.stringify(customerData));
+      localStorage.setItem("orderItems", JSON.stringify(orderItems));
+
+      // navigate to billing page
+      window.location.href = "../billing_page/bill.html";
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Could not place order — server error");
+    });
 }
 
 // UPDATE QTY
