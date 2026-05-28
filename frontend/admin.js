@@ -1,321 +1,146 @@
-let menuItems = [
-  {
-    id: 1,
-    name: "Espresso",
-    category: "Coffee",
-    price: 80,
-    icon: "⚡",
-    available: true,
-  },
-  {
-    id: 2,
-    name: "Cappuccino",
-    category: "Coffee",
-    price: 120,
-    icon: "☕",
-    available: true,
-  },
-  {
-    id: 3,
-    name: "Latte",
-    category: "Coffee",
-    price: 130,
-    icon: "🥛",
-    available: true,
-  },
-  {
-    id: 4,
-    name: "Cold Brew",
-    category: "Cold Drinks",
-    price: 150,
-    icon: "🧊",
-    available: true,
-  },
-  {
-    id: 5,
-    name: "Masala Chai",
-    category: "Tea",
-    price: 60,
-    icon: "🍵",
-    available: true,
-  },
-  {
-    id: 6,
-    name: "Iced Mocha",
-    category: "Cold Drinks",
-    price: 160,
-    icon: "🍫",
-    available: true,
-  },
-  {
-    id: 7,
-    name: "Green Tea",
-    category: "Tea",
-    price: 80,
-    icon: "🌿",
-    available: false,
-  },
-  {
-    id: 8,
-    name: "Blueberry Muffin",
-    category: "Food",
-    price: 90,
-    icon: "🧁",
-    available: true,
-  },
-  {
-    id: 9,
-    name: "Croissant",
-    category: "Food",
-    price: 110,
-    icon: "🥐",
-    available: true,
-  },
-  {
-    id: 10,
-    name: "Waffle",
-    category: "Desserts",
-    price: 180,
-    icon: "🧇",
-    available: false,
-  },
-];
+const API = "http://localhost:5000/admin";
 
-let nextId = 6;
-let editingId = null;
-let currentBillFilter = "all";
-let bills = [];
-async function loadBills(status = "all") {
+/* ---------------- MENU ---------------- */
 
-  const url =
-    status === "all"
-      ? "http://localhost:5000/admin/orders"
-      : `http://localhost:5000/admin/orders/status/${status}`;
-
-  const res = await fetch(url);
-
-  const data = await res.json();
-
-  bills = data;
-
-  renderBills();
+async function fetchMenu() {
+  const res = await fetch(`${API}/menu`);
+  return await res.json();
 }
 
-// TAB SWITCH
-function switchTab(tab, btn) {
-  document
-    .querySelectorAll(".page")
-    .forEach((p) => p.classList.remove("active"));
-
-  document
-    .querySelectorAll(".nav-tab")
-    .forEach((t) => t.classList.remove("active"));
-
-  document.getElementById("page-" + tab).classList.add("active");
-
-  btn.classList.add("active");
-
-  if (tab === "menu") renderMenu();
-
-  if (tab === "bills") renderBills();
+async function addMenuItem(data) {
+  await fetch(`${API}/menu`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  renderMenu();
 }
 
-// RENDER MENU
-function renderMenu() {
+async function updateMenuItem(id, data) {
+  await fetch(`${API}/menu/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  renderMenu();
+}
+
+async function deleteMenuItem(id) {
+  await fetch(`${API}/menu/${id}`, {
+    method: "DELETE",
+  });
+  renderMenu();
+}
+
+/* ---------------- ORDERS ---------------- */
+
+async function fetchOrders() {
+  const res = await fetch(`${API}/orders`);
+  return await res.json();
+}
+
+async function updateOrderStatus(id, status) {
+  await fetch(`${API}/orders/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+}
+
+/* ---------------- BILLS ---------------- */
+
+async function fetchBills() {
+  const res = await fetch(`http://localhost:5000/bills`);
+  return await res.json();
+}
+
+/* ---------------- DASHBOARD ---------------- */
+
+async function loadDashboard() {
+  try {
+    const res = await fetch(`${API}/dashboard`);
+    const data = await res.json();
+
+    document.getElementById("orders").innerText = data.totalOrders;
+    document.getElementById("bills").innerText = data.totalBills;
+    document.getElementById("revenue").innerText = data.totalRevenue;
+  } catch (err) {
+    console.error("Dashboard API missing in backend:", err);
+  }
+}
+
+/* ---------------- RENDER MENU ---------------- */
+
+async function renderMenu() {
+  const menuItems = await fetchMenu();
+
   const container = document.getElementById("menu-categories");
-
   container.innerHTML = "";
 
-  const categories = [...new Set(menuItems.map((m) => m.category))];
+  const categories = [...new Set(menuItems.map(m => m.category))];
 
-  categories.forEach((cat) => {
-    const items = menuItems.filter((m) => m.category === cat);
+  categories.forEach(cat => {
+    const items = menuItems.filter(m => m.category === cat);
 
-    let html = `<div class="menu-category-label">${cat}</div>
-       <div class="menu-grid">`;
+    let html = `<div class="menu-category-label">${cat}</div><div class="menu-grid">`;
 
-    items.forEach((item) => {
+    items.forEach(item => {
       html += `
-      <div class="menu-card">
+        <div class="menu-card">
+          <div class="icon">${item.icon}</div>
+          <div>${item.name}</div>
+          <div>₹${item.price}</div>
 
-        <div class="card-actions">
-          <button class="card-btn" onclick="editItem(${item.id})">✏️</button>
-          <button class="card-btn del" onclick="deleteItem(${item.id})">🗑</button>
-        </div>
+          <button onclick="deleteMenuItem('${item.id}')">Delete</button>
 
-        <div class="icon">${item.icon}</div>
-
-        <div class="item-name">${item.name}</div>
-
-        <span class="category-tag">${item.category}</span>
-
-        <div class="item-price">₹${item.price}</div>
-
-        <div class="avail-toggle">
-
-          <button
-            class="toggle ${item.available ? "on" : "off"}"
-            onclick="toggleAvail(${item.id})">
+          <button onclick="updateMenuItem('${item.id}', {
+            available: ${!item.available}
+          })">
+            Toggle
           </button>
-
-          <span class="toggle-label">
-            ${item.available ? "Available" : "Unavailable"}
-          </span>
-
         </div>
-
-      </div>`;
+      `;
     });
 
     html += `</div>`;
-
     container.innerHTML += html;
   });
 }
 
-// TOGGLE
-function toggleAvail(id) {
-  const item = menuItems.find((m) => m.id === id);
+/* ---------------- RENDER ORDERS ---------------- */
 
-  item.available = !item.available;
+async function renderOrders() {
+  const orders = await fetchOrders();
 
-  renderMenu();
+  console.log("Orders:", orders);
+
+  // You can build UI here
 }
 
-// DELETE
-function deleteItem(id) {
-  if (!confirm("Delete this item?")) return;
+/* ---------------- RENDER BILLS ---------------- */
 
-  menuItems = menuItems.filter((m) => m.id !== id);
+async function renderBills() {
+  const bills = await fetchBills();
 
-  renderMenu();
-}
-
-// EDIT
-function editItem(id) {
-  const item = menuItems.find((m) => m.id === id);
-
-  editingId = id;
-
-  document.getElementById("modal-title").textContent = "Edit Menu Item";
-
-  document.getElementById("f-name").value = item.name;
-
-  document.getElementById("f-category").value = item.category;
-
-  document.getElementById("f-price").value = item.price;
-
-  document.getElementById("f-icon").value = item.icon;
-
-  document.getElementById("menu-modal").classList.add("open");
-}
-
-// OPEN MODAL
-function openMenuModal() {
-  editingId = null;
-
-  document.getElementById("modal-title").textContent = "Add Menu Item";
-
-  document.getElementById("f-name").value = "";
-
-  document.getElementById("f-price").value = "";
-
-  document.getElementById("f-icon").value = "";
-
-  document.getElementById("menu-modal").classList.add("open");
-}
-
-// CLOSE MODAL
-function closeModal() {
-  document.getElementById("menu-modal").classList.remove("open");
-}
-
-// SAVE ITEM
-function saveMenuItem() {
-  const name = document.getElementById("f-name").value.trim();
-
-  const category = document.getElementById("f-category").value;
-
-  const price = parseInt(document.getElementById("f-price").value);
-
-  const icon = document.getElementById("f-icon").value.trim() || "☕";
-
-  if (!name || !price) {
-    alert("Please fill all fields");
-
-    return;
-  }
-
-  if (editingId) {
-    const item = menuItems.find((m) => m.id === editingId);
-
-    Object.assign(item, {
-      name,
-      category,
-      price,
-      icon,
-    });
-  } else {
-    menuItems.push({
-      id: nextId++,
-      name,
-      category,
-      price,
-      icon,
-      available: true,
-    });
-  }
-
-  closeModal();
-
-  renderMenu();
-}
-
-// RENDER BILLS
-function renderBills() {
   const container = document.getElementById("bills-list");
 
-  const filtered =
-    currentBillFilter === "all"
-      ? bills
-      : bills.filter((b) => b.status === currentBillFilter);
-
-  container.innerHTML = filtered
+  container.innerHTML = bills
     .map(
-      (b) => `
+      b => `
       <div class="bill-card">
-
-        <div class="bill-id">${b.id}</div>
-
-        <div class="bill-info">
-          <div class="bill-customer">${b.customer}</div>
-          <div class="bill-items-list">${b.items}</div>
-        </div>
-
-        <div class="bill-date">${b.date}</div>
-
-        <div class="bill-total">₹${b.total}</div>
-
+        <div>${b.id}</div>
+        <div>${b.customer}</div>
+        <div>${b.items}</div>
+        <div>₹${b.total}</div>
+        <div>${b.status}</div>
       </div>
-    `,
+    `
     )
     .join("");
 }
 
-// FILTER BILLS
-function filterBills(filter, btn) {
-  currentBillFilter = filter;
+/* ---------------- INIT ---------------- */
 
-  document
-    .querySelectorAll(".filter-btn")
-    .forEach((b) => b.classList.remove("active"));
-
-  btn.classList.add("active");
-
- loadBills(filter);
-}
-
-// INITIAL LOAD
 renderMenu();
-
-loadBills();
+renderBills();
+loadDashboard();
