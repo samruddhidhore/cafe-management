@@ -218,6 +218,12 @@ no<!DOCTYPE html>
   </div>
 
   <script>
+    // ── Admin route: visiting /admin or /admin/ opens admin.html ──
+    (function () {
+      const p = window.location.pathname.replace(/\/+$/, '');
+      if (p === '/admin') window.location.replace('admin.html');
+    })();
+
     const nameInput = document.getElementById('nameInput');
     const enterBtn  = document.getElementById('enterBtn');
 
