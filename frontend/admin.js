@@ -1,3 +1,88 @@
+let menuItems = [
+  {
+    id: 1,
+    name: "Espresso",
+    category: "Coffee",
+    price: 80,
+    icon: "⚡",
+    available: true,
+  },
+  {
+    id: 2,
+    name: "Cappuccino",
+    category: "Coffee",
+    price: 120,
+    icon: "☕",
+    available: true,
+  },
+  {
+    id: 3,
+    name: "Latte",
+    category: "Coffee",
+    price: 130,
+    icon: "🥛",
+    available: true,
+  },
+  {
+    id: 4,
+    name: "Cold Brew",
+    category: "Cold Drinks",
+    price: 150,
+    icon: "🧊",
+    available: true,
+  },
+  {
+    id: 5,
+    name: "Masala Chai",
+    category: "Tea",
+    price: 60,
+    icon: "🍵",
+    available: true,
+  },
+  {
+    id: 6,
+    name: "Iced Mocha",
+    category: "Cold Drinks",
+    price: 160,
+    icon: "🍫",
+    available: true,
+  },
+  {
+    id: 7,
+    name: "Green Tea",
+    category: "Tea",
+    price: 80,
+    icon: "🌿",
+    available: false,
+  },
+  {
+    id: 8,
+    name: "Blueberry Muffin",
+    category: "Food",
+    price: 90,
+    icon: "🧁",
+    available: true,
+  },
+  {
+    id: 9,
+    name: "Croissant",
+    category: "Food",
+    price: 110,
+    icon: "🥐",
+    available: true,
+  },
+  {
+    id: 10,
+    name: "Waffle",
+    category: "Desserts",
+    price: 180,
+    icon: "🧇",
+    available: false,
+  },
+];
+
+let nextId = 6;
+let editingId = null;
 let currentBillFilter = "all";
 
 // TAB SWITCH
