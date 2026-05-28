@@ -13,11 +13,7 @@ if (orderBtn) {
   });
 }
 
-<<<<<<< HEAD
 const user = sessionStorage.getItem("customerName") || "guest";
-=======
-const user = localStorage.getItem("userName") || "guest";
->>>>>>> 42fe7de530d4d97285041dd8990bd7eb26a1248d
 
 // LOAD ORDER
 function loadOrder() {
