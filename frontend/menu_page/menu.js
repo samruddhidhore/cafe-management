@@ -163,6 +163,10 @@ function renderCards(items) {
   });
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> menu-api
 // ------ HANDLE ADD BUTTON ------
 function handleAdd(id, btn) {
   if (addedItems.has(id)) {
@@ -177,6 +181,10 @@ function handleAdd(id, btn) {
   // Save selections to localStorage so the Order page can read them
   localStorage.setItem("selectedItems", JSON.stringify(Array.from(addedItems)));
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> menu-api
 // ------ ADD TO ORDER (BACKEND CALL) ------
 function addToOrder(id) {
   const item = menuItems.find(i => i.id === id);
@@ -219,6 +227,10 @@ filterBtns.forEach(btn => {
   });
 });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> menu-api
 
 // ------ NAV BUTTONS ROUTING ------
 // Inside frontend/menu_page/menu.js
@@ -247,4 +259,20 @@ document.getElementById("orderBtn").addEventListener("click", () => {
 // ------ INIT ------
 renderCards(menuItems);
 }
+<<<<<<< HEAD
 renderCards(menuItems);
+=======
+
+// ------ NAVIGATION ------
+document.getElementById("menuBtn").addEventListener("click", () => {
+  window.location.href = "./menu.html";
+});
+
+document.getElementById("orderBtn").addEventListener("click", () => {
+  window.location.href = "../frontend-order/index.html";
+});
+
+// ------ INIT ------
+renderCards(menuItems);
+
+>>>>>>> menu-api
